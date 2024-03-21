@@ -1,0 +1,31 @@
+name: Generate Jest Coverage Badges
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  generate-badges:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Run Jest with coverage
+        run: npx jest --coverage --coverageReporters="json-summary"
+
+      - name: Generate coverage badges
+        run: npx jest-coverage-badges output "./badges"
+
+      - name: Commit and push changes
+        run: |
+          git config --global user.name 'GitHub Actions'
+          git config --global user.email 'actions@users.noreply.github.com'
+          git add badges/*
+          git commit -m "Update coverage badges" || exit 0
+          git push
