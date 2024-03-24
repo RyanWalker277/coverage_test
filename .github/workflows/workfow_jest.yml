@@ -25,9 +25,9 @@ jobs:
       uses: mattallty/jest-github-action@v1
       env:
         GITHUB_TOKEN: ${{ secrets.TOKEN }}
-      # with:
+      with:
         # Optionally, you can provide custom test command if needed
-        # test-command: "yarn test"
+        test-command: "yarn test"
         # You can run tests related to changes only
         # changes-only: true
         # Or specify a working directory
