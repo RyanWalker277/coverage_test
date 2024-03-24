@@ -5,19 +5,32 @@ on:
     types: [opened, reopened, synchronize]
 
 jobs:
-  annotate-pr:
+  jest_coverage:
+    name: Jest Coverage
     runs-on: ubuntu-latest
-    name: Run tests on pull request
+
     steps:
-      - name: Checkout
-        uses: actions/checkout@v3
+    - name: Checkout code
+      uses: actions/checkout@v2
+      
+    - name: Set up Node.js
+      uses: actions/setup-node@v2
+      with:
+        node-version: '16'
+        
+    - name: Install dependencies
+      run: npm install # or yarn install
 
-      - uses: actions/setup-node@v3
-        with:
-          node-version: '18'
-          cache: 'npm'
-
-      - run: yarn install
-
-      - name: Jest PR analysis
-        uses: Manogel/jest-pr-analysis@v1.1.1
+    - name: Run Jest tests with coverage
+      uses: mattallty/jest-github-action@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.TOKEN }}
+      # with:
+        # Optionally, you can provide custom test command if needed
+        # test-command: "yarn test"
+        # You can run tests related to changes only
+        # changes-only: true
+        # Or specify a working directory
+        # working-directory: "frontend"
+        # You may want to silence code coverage comment if not needed
+        # coverage-comment: false
