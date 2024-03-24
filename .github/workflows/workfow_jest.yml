@@ -2,17 +2,22 @@ name: Jest Code Coverage Report
 
 on:
   pull_request:
+    types: [opened, reopened, synchronize]
 
 jobs:
-  build:
+  annotate-pr:
     runs-on: ubuntu-latest
+    name: Run tests on pull request
     steps:
-      - name: Install dependencies
-        run: yarn install
+      - name: Checkout
+        uses: actions/checkout@v3
 
-      - name: Hello world action step
-        id: hello
-        uses: raulanatol/jest-coverage-comment-action@main
+      - uses: actions/setup-node@v3
         with:
-          github-token: ${{ secrets.TOKEN }}
-          jest-command: 'npx jest --collectCoverageFrom="src/**/*.{js,jsx,ts,tsx}" --coverage --collectCoverage=true --coverageDirectory="./" --coverageReporters="json-summary" --forceExit --detectOpenHandles'
+          node-version: '18'
+          cache: 'yarn'
+
+      - run: yarn install
+
+      - name: Jest PR analysis
+        uses: Manogel/jest-pr-analysis@v1.1.1
