@@ -1,19 +1,25 @@
 name: Jest Code Coverage Report
 
-on:
-  pull_request:
-    branches:
-      - '*'
+on: pull_request
 
 jobs:
-  jest_coverage:
-    runs-on: ubuntu-latest
+  build:
+    strategy:
+      matrix:
+        node-version: [16.10]
+        platform: [ubuntu-latest]
+    runs-on: ${{ matrix.platform }}
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
-
-      - name: Run Jest Code Coverage
-        uses: ziishaned/jest-reporter-action@v0.1.1
-        with:
-          github-token: ${{ secrets.TOKEN }}
-          test-command: "yarn jest --coverage"
+    - uses: actions/checkout@v2
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v1
+      with:
+        node-version: ${{ matrix.node-version }}
+    - run: npm ci
+    - name: TestCoverage
+      id: testCoverage
+      uses: anuraag016/Jest-Coverage-Diff@master
+      with:
+        fullCoverageDiff: false // defaults to false, if made true whole coverage report is commented with the diff
+        runCommand: "npx jest --collectCoverageFrom='[\"src/**/*.{js,jsx,ts,tsx}\"]' --coverage --collectCoverage=true --coverageDirectory='./' --coverageReporters='json-summary' --forceExit --detectOpenHandles test/.*test.*"
+        delta: 0.5
