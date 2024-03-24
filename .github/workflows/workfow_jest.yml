@@ -29,8 +29,8 @@ jobs:
     needs: run-tests
 
     steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v2
+      # - name: Checkout Repository
+      #   uses: actions/checkout@v2
 
       - name: Coverage Comment
         uses: vgrafe/jest-reports@v0.1.5
