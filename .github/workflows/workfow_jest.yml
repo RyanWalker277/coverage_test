@@ -1,15 +1,36 @@
-name: Jest Code Coverage Report
+name: Jest Test Suite
 
 on:
   pull_request:
-    types: [opened, reopened, synchronize]
-    
+
 jobs:
-  compare-cov:
+  run-tests:
+    name: Run Jest Tests
     runs-on: ubuntu-latest
+
     steps:
-      - uses: vgrafe/jest-reports@v0.1.5
-    with:
-      github-token:
-        description: "A github access token"
-        default: ${{ github.TOKEN }}
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: 16.18
+
+      - name: Install Dependencies
+        run: npm install
+
+      - name: Run Jest Tests
+        run: npm test -- --coverage
+
+  compare-cov:
+    name: Compare Code Coverage
+    runs-on: ubuntu-latest
+    needs: run-tests
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+
+      - name: Coverage Comment
+        uses: vgrafe/jest-reports@v0.1.5
