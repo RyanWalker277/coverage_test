@@ -9,3 +9,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: vgrafe/jest-reports@v0.1.5
+    with:
+      github-token:
+        description: "A github access token"
+        default: ${{ github.TOKEN }}
