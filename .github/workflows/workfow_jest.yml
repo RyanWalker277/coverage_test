@@ -27,7 +27,7 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.TOKEN }}
       with:
         # Optionally, you can provide custom test command if needed
-        test-command: "yarn test"
+        test-command: "yarn jest"
         # You can run tests related to changes only
         # changes-only: true
         # Or specify a working directory
